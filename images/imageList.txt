@@ -1,0 +1,5 @@
+--> amazon-ebs.app-east: AMIs were created:
+us-east-2: ami-077c040dca9513fd1
+
+--> amazon-ebs.app-west: AMIs were created:
+us-west-2: ami-005fabf6cd9b261af
