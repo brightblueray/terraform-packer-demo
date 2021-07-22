@@ -1,16 +1,14 @@
-#modules/multi-region/main.tf
-
+/*
+Common Resources Required for VMs
+*/
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = ">= 2.7.0"
+      source                = "hashicorp/aws"
+      version               = ">= 3.46.0"
     }
   }
 }
-
-variable "name" {}
-variable "ami" {}
 
 resource "aws_vpc" "vpc" {
   #One VPC for each Provider
@@ -74,29 +72,4 @@ resource "aws_security_group" "sg_22_80" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
-
-# resource "aws_instance" "web" {
-#   ami                         = var.image_id
-#   instance_type               = "t2.micro"
-#   subnet_id                   = aws_subnet.subnet_public.id
-#   vpc_security_group_ids      = [aws_security_group.sg_22_80.id]
-#   associate_public_ip_address = true
-
-#   tags = {
-#     Name = "Learn-Packer-rryjewski"
-#   }
-# }
-
-resource "aws_instance" "demo" {
-  ami           = var.ami
-  instance_type = "t2.micro"
-  subnet_id                   = aws_subnet.subnet_public.id
-  vpc_security_group_ids      = [aws_security_group.sg_22_80.id]
-  associate_public_ip_address = true
-}
-
-
-output "public_ip" {
-  value = aws_instance.demo.public_ip
 }
