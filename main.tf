@@ -54,24 +54,43 @@ module "common-us-west-2" {
 
 
 
-# # Provision VM with Webapp using TF and cloud-init
-# module "cloudInit-us-east-2" {
-#   source = "./modules/tfMultiRegion"
-#   name = "rryjewski_us-east"
-  
-#   providers = {
-#     aws = aws.aws_east
-#    }
-# }
+# Provision VM with Webapp using TF and cloud-init
+module "cloudInit-us-east-2" {
+  source = "./modules/tfMultiRegion"
+  # depends_on = [common-us-east-2]
+  ami = module.common-us-east-2.ami
+  #"ami-09e67e426f25ce0d7" #Lookup via Console Ubuntu 20.4
+  subnet_id = module.common-us-east-2.subnet_id
+  security_group_id = module.common-us-east-2.security_group_id
 
-# module "cloudInit-us-west-2" {
-#   source = "./modules/tfMultiRegion"
-#   name = "rryjewski_us-west"
   
-#   providers = {
-#     aws = aws.aws_west
-#    }
-# }
+  providers = {
+    aws = aws.aws_east
+   }
+}
+
+module "cloudInit-us-west-2" {
+  source = "./modules/tfMultiRegion"
+  
+  ami = module.common-us-west-2.ami
+  subnet_id = module.common-us-west-2.subnet_id
+  security_group_id = module.common-us-west-2.security_group_id
+
+  # name = "rryjewski_us-west"
+  
+  providers = {
+    aws = aws.aws_west
+   }
+}
+
+output "West_public_ip" {
+  value = module.cloudInit-us-west-2.public_ip
+}
+
+output "East_public_ip" {
+  value = module.cloudInit-us-east-2.public_ip
+}
+
 
 # # Provision VM with Webapp created with Packer
 # # TODO Update Module to use data to lookup AMI image

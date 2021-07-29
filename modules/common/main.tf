@@ -73,3 +73,31 @@ resource "aws_security_group" "sg_22_80" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] 
+}
+
+output "subnet_id" {
+  value = aws_subnet.subnet_public.id
+}
+
+output "security_group_id" {
+  value = aws_security_group.sg_22_80.id
+}
+
+output "ami" {
+  value = data.aws_ami.ubuntu.id
+}
